@@ -1,0 +1,63 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "account api document",
+        "title": "account api",
+        "version": "1.0.0"
+    },
+    "tags": [
+        {
+            "name": "Account",
+            "description": "账户相关的接口"
+        }
+    ],
+    "paths": {
+        "/account/login": {
+            "post": {
+                "tags": [
+                    "Account"
+                ],
+                "operationId": "login",
+                "x-swagger-router-controller": "src.controllers.user.Users",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "login_args",
+                        "in": "body",
+                        "description": "login info",
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "account",
+                                "password"
+                            ],
+                            "properties": {
+                                "account": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "userId": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
