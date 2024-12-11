@@ -6,6 +6,15 @@ from src.utils import random_string
 
 app = application.app
 
+# @app.before_request
+# def set_header():
+#     print('===========middleware 2 start======================')
+#     # 抛出错误，会中断api请求
+#     # raise HttpError('权限错误')
+#     # 设置header，key必须以 HTTP_ 开头，后续将被当做header的key，如HTTP_xab-test或HTTP_xab_test，会为header设置key: Xab-Test
+#     # request.headers.environ['HTTP_xab-test'] = '123'
+#     print('===========middleware 2 end======================')
+
 
 @app.before_request
 def set_log_trace_header():

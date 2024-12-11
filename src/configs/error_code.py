@@ -5,6 +5,9 @@ class ErrorCode:
     NOT_FOUND = 'NOT_FOUND'
     __NOT_FOUND__ = 404
 
+    URL_NOT_FOUND = 'URL_NOT_FOUND'
+    __URL_NOT_FOUND__ = 404
+
     USER_NOT_FOUND = 'USER_NOT_FOUND'
     __USER_NOT_FOUND__ = 404
 
