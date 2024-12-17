@@ -8,26 +8,27 @@ class Timer:
         self.record = {}
 
     def set_interval(self, interval: int, fn, **fnArgs):
-        mark = ''.join(random.sample('zyxwvutsrqponmlkjihgfedcba', 10))
+        timer_record = ''.join(random.sample('zyxwvutsrqponmlkjihgfedcba', 10))
 
-        def _set_interval(_mark, _interval: int, _fn, **_fnArgs):
+        def _set_interval(_timer_record, _interval: int, _fn, **_fnArgs):
             def wrapper():
                 _set_interval(None, _interval, _fn, **_fnArgs)
                 _fn(**_fnArgs)
-            if (_mark):
-                self.record[_mark] = threading.Timer(_interval, wrapper)
-                self.record[_mark].start()
-            elif (self.record[mark]):
-                self.record[mark] = threading.Timer(_interval, wrapper)
-                self.record[mark].start()
+            if (_timer_record):
+                self.record[_timer_record] = threading.Timer(_interval, wrapper)
+                self.record[_timer_record].start()
+            elif (self.record[timer_record]):
+                self.record[timer_record] = threading.Timer(_interval, wrapper)
+                self.record[timer_record].start()
 
-        _set_interval(mark, interval, fn, **fnArgs)
-        return mark
+        _set_interval(timer_record, interval, fn, **fnArgs)
+        return timer_record
 
     def clear_interval(self, timer):
         print('clear_interval: ', timer)
         if self.record[timer]:
             self.record[timer].cancel()
+            self.record[timer] = None
             self.record.pop(timer)
 
 

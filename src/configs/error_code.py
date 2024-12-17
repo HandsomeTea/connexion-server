@@ -16,4 +16,4 @@ class ErrorCode:
 
     @classmethod
     def get_error_number(self, error_code) -> int:
-        return getattr(self, '__' + error_code + '__', 500)
+        return getattr(self, '__' + str(error_code) + '__', 500)
