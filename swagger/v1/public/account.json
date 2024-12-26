@@ -26,7 +26,7 @@
                     {
                         "name": "login_args",
                         "in": "body",
-                        "description": "login info",
+                        "description": "登录参数所在的dict名称",
                         "schema": {
                             "type": "object",
                             "required": [
