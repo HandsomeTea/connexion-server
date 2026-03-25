@@ -1,4 +1,6 @@
 import os
+import io
+import tarfile
 from flask import Response
 from src.configs import HttpError, ErrorCode
 
@@ -14,6 +16,36 @@ def _stream_file_generator(file_path, chunk_size=1024 * 1024):
             if not data:
                 break
             yield data
+
+
+class _TarStreamer:
+    def __init__(self):
+        self.buffer = io.BytesIO()
+
+    def write(self, data):
+        self.buffer.write(data)
+
+    def get_data(self):
+        data = self.buffer.getvalue()
+        self.buffer.seek(0)
+        self.buffer.truncate()
+        return data
+
+
+def _generate_tar_stream(folder_path):
+    streamer = _TarStreamer()
+
+    with tarfile.open(fileobj=streamer, mode='w|') as tar:
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                full_path = os.path.join(root, file)
+
+                arcname = os.path.relpath(full_path, start=os.path.dirname(folder_path))
+                tar.add(full_path, arcname=arcname)
+
+                yield streamer.get_data()
+
+    yield streamer.get_data()
 
 
 class Files:
@@ -46,3 +78,18 @@ class Files:
         response.headers['Content-Length'] = os.path.getsize(path)
 
         return response
+
+    def _padk_and_download_file():
+        # 如果是一个文件夹，可以边打包成tar边下载
+        dir_path = "/home/SENSETIME/liuhaifeng/postman-linux-x64"
+        download_file_name = "postman-linux-x64.tar.gz"
+
+        return Response(
+            _generate_tar_stream(dir_path),
+            mimetype='application/octet-stream',
+            headers={
+                "Content-Disposition": f'attachment; filename={download_file_name}',
+                # 必须设置，否则 Nginx 会等全部打包完才发给前端
+                "X-Accel-Buffering": "no"
+            }
+        )
