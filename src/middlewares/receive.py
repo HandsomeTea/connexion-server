@@ -25,9 +25,14 @@ def set_log_trace_header():
 
 @app.before_request
 def log_request():
+    if not request.data:
+        body = {}
+    else:
+        body = request.get_json(force=True)
+
     log_api.info(f'{request.method}:{request.path}\n' + json.dumps({
         'query': request.args,
-        'body': request.get_json(),
+        'body': body,
         'headers': dict(request.headers),
     }, indent=4, ensure_ascii=False), extra={
         'trace_id': request.headers.get('X-B3-TraceId'),

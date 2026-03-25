@@ -9,6 +9,10 @@
         {
             "name": "User",
             "description": "用户相关接口"
+        },
+        {
+            "name": "File",
+            "description": "文件相关接口"
         }
     ],
     "paths": {
@@ -65,6 +69,36 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/file/download": {
+            "get": {
+                "tags": [
+                    "File"
+                ],
+                "operationId": "download_file",
+                "x-swagger-router-controller": "src.controllers.file.Files",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "文件下载成功",
+                        "schema": {
+                            "type": "file"
+                        },
+                        "headers": {
+                            "Content-Disposition": {
+                                "type": "string",
+                                "description": "用于指定下载的文件名，例如: attachment; filename=data.zip"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "文件未找到"
                     }
                 }
             }
